@@ -1,0 +1,37 @@
+==================== Задание 1
+Написать программу на Java, где задать лист размерностью N, где N - четное число, а содержимое - числа от 1 до N. Поменяйте местами попарно его элементы. То есть первый со вторым, третий с четвертым и т.д.
+
+
+==================== Задание 2
+Перед тобой код метода - реализации сортировки “пузырьком”.
+Перепиши код, чтобы вместо списка ArrayList<Integer> intList использовался массив int[] intArray. Реализовать сортировку для массива
+
+public static void bubbleSort(ArrayList<Integer> intList) {
+for (int i = 0; i < intList.size() - 1; i++) {
+            for (int j = 0; j < intList.size() - i - 1; j++) {
+                if (intList.get(j) > intList.get(j + 1)) {
+                    int temp = intList.get(j);
+                    intList.set(j, intList.get(j + 1));
+                    intList.set(j + 1, temp);
+                }
+            }
+        }
+}
+
+public static void bubbleSort(int[] intArray) {
+	//Реализовать сортировку для массива
+}
+
+
+==================== Задание 3
+Перед тобой код метода, который переставляет числа в массиве в обратном порядке
+public static void reverse(int[] intArray) {
+        int n = intArray.length - 1;
+        for (int i = 0; i < intArray.length / 2; i++) {
+            int temp = intArray[i];
+            intArray[i] = intArray[n - i];
+            intArray[n - i] = temp;
+        }
+    }
+Задача - написать такой же метод для ArrayList<Integer>. 
+Написать программу на Java, где задать лист размерностью N, где N - четное число, а содержимое - числа от 1 до N. Написать код метода для ArrayList<Integer> , который переставляет числа в массиве в обратном порядке
