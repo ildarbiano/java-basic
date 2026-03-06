@@ -1,0 +1,82 @@
+
+PS C:\app\java_lesson> cat .\My1Class_3.java
+public class My1Class_2 {                           	//описание класса с именем
+    public static void main(String... args) {       	//точка входа, метод main, с жёстко заданной сигнатурой.
+            System.out.println("Hello World");      	//функция класса PrintStream, по статическим полем out класса System
+            for (int i = 0; i < args.length; i++) { 	//
+                System.out.println(args[i]);		//функция класса PrintStream, по статическим полем out класса System
+        }
+    }
+}
+for				- цикл.
+int i = 0 			— инициализация счетчика. Создаем переменную i типа int. Начальное значение 0 (индексы в Java начинаются с 0). Переменная i существует только внутри цикла.
+i < args.length 		— условие продолжения args.length — длина массива аргументов. Цикл будет выполняться, пока i меньше длины массива. Например, если передано 3 аргумента, цикл выполнится для i = 0, 1, 2.
+i++ 				— инкремент (увеличение на 1). После каждой итерации i увеличивается на 1. i++ эквивалентно i = i + 1.
+args = ["Java", "Is", "Awesome"]
+args.length = 3
+Итерации:
+1. i=0: 0 < 3? ДА → печатаем args[0] = "Java"
+2. i=1: 1 < 3? ДА → печатаем args[1] = "Is"  
+3. i=2: 2 < 3? ДА → печатаем args[2] = "Awesome"
+4. i=3: 3 < 3? НЕТ → цикл завершается
+=====================================
+
+PS C:\app\java_lesson> 		javac .\My1Class_3.java
+PS C:\app\java_lesson> 		java My1Class_3 arg1 arg2 arg3 arg4
+Hello World
+arg1
+arg2
+arg3
+arg4
+====
+---- измения вывода и аргументов ввода ----
+public class My1Class_3 {                           //описание класса с именем
+    public static void main(String... args) {       //точка входа, метод main, с жёстко заданной сигнатурой.
+            System.out.println("Hello World");      //функция класса PrintStream, по статическим полем out класса System
+            for (int i = 0; i < args.length; i++) { //
+                System.out.println(args[i] + " - " + "changed to = " + args[i+1]);
+        }
+    }
+}
+PS C:\app\java_lesson> 	javac .\My1Class_3.java
+PS C:\app\java_lesson> 	java My1Class_3 arg1 arg2 arg3 arg4
+Hello World
+arg1 - changed to = arg2
+arg2 - changed to = arg3
+arg3 - changed to = arg4
+Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: Index 4 out of bounds for length 4
+        at My1Class_3.main(My1Class_3.java:5)
+ArrayIndexOutOfBoundsException			//это исключение, которое возникает при попытке обратиться к элементу массива по несуществующему индексу.
+Проблема:
+Когда i = 3 					//последняя итерация
+args[3] 					//существует - это "arg4"
+Но args[3 + 1] = args[4] 			//НЕ существует!
+Итерации:
+i=0: args[0]="arg1", args[1]="arg2" ✓
+i=1: args[1]="arg2", args[2]="arg3" ✓  
+i=2: args[2]="arg3", args[3]="arg4" ✓
+i=3: args[3]="arg4", args[4]=???    ✗ ОШИБКА!
+------------- исправление. было -------------
+for (int i = 0; i < args.length; i++) { //
+    System.out.println(args[i] + " - " + "changed to = " + args[i+1]);
+}
+------------- исправление. надо -------------
+for (int i = 0; i < args.length - 1; i++) {
+    // Теперь i+1 всегда существует
+    System.out.println(args[i] + " - changed to = " + args[i + 1]);
+}
+------------- итоговый код класса -----------
+public class My1Class_3 {                           //описание класса с именем
+    public static void main(String... args) {       //точка входа, метод main, с жёстко заданной сигнатурой.
+            System.out.println("Hello World");      //функция класса PrintStream, по статическим полем out класса System
+            for (int i = 0; i < args.length - 1; i++) { //
+                System.out.println(args[i] + " - " + "changed to = " + args[i+1]);
+        }
+    }
+}
+PS C:\app\java_lesson> 	javac .\My1Class_3.java
+PS C:\app\java_lesson> 	java My1Class_3 arg1 arg2 arg3 arg4
+Hello World
+arg1 - changed to = arg2
+arg2 - changed to = arg3
+arg3 - changed to = arg4

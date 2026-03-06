@@ -1,0 +1,188 @@
+Задание 1
+В данном ДЗ необходимо выполнить практическое задания в рамках парадигмы ООП.
+
+Ожидаемый результат: приложить скрин только части результата выполнения программы в командной строке. Запуск выполнять используя предварительно собранный вами jar-архив.
+  
+ВНИМАНИЕ!
+Высылать необходимо только часть результата выполнения в командной строке, где в имени пути обязательно должно быть название папки с вашим именем на латинице.
+  
+1. Пакет – ru.inno.lesson;
+
+2. Создайте публичный класс Account – счета банка. Каждый счет характеризуется своим уникальным номером, остатком средств на счете (в рублях);
+	конструктор может принимать номер счета (остаток = 0);
+	конструктор может принимать номер счета, остатком средств на счете
+	создайте метод получения номера счета 
+	создайте метод изменения номера счета
+	создайте метод получения остатка средств на счете
+	создайте метод изменения остатка средств на счете.
+
+3.Создайте публичный класс Client – клиента банка.
+	клиент характеризуется именем, фамилией, серией и номером паспорта; 
+	класс явным образом хранит список счетов;
+	конструктор может принимать имя, фамилию, паспортные данные (размер массива счетов = 0);
+	конструктор может принимать имя, фамилию, паспортные данные и массив счетов;
+	создайте метод, возвращающий ссылку на счет по его уникальному номеру;
+	создайте метод, возвращающий массив всех счетов;
+	создайте метод, возвращающий суммарный остаток на всех счетах;
+	создайте метод, возвращающий массив счетов с положительным остатком на счете;
+	создайте метод удаления счета по его номеру;
+	создайте метод добавления счета (принимает в качестве входного параметра ссылку на счет, расширяет массив счетов путем добавления нового счета в конец массива):
+	создайте метод уменьшения размера остатка счета (принимает ссылку на счет и размер суммы);
+	создайте метод увеличения размера остатка счета (принимает ссылку на счет и размер суммы);
+
+4. Создайте класс с точкой входа (main метод) и сделайте проверку созданных вами классов путем создания экземпляров классов и вызова поочередно методы с логикой. Результат выведите в консоль.
+=============================
+C:\app\java_lesson_2_OOP
+New-Item -ItemType File -Force hw_2-1\src\main\java\ru\inno\lesson\Main.java		//Создание директории, с файлом Main.java
+
+C:\app\java_lesson_2_OOP
+type hw_2-1\src\main\java\ru\inno\lesson\Main.java					//Hello world
+package ru.inno.lesson;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello World. HW-2-1");
+    }
+}
+C:\app\java_lesson_2_OOP\hw_2-1>								
+type pom.xml 	
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.inno.lesson</groupId>
+    <artifactId>less_2</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.inno.lesson.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>								//Project, Plugin Maven
+
+C:\app\java_lesson_2_OOP\hw_2-1> 
+mvn clean package
+PS C:\app\java_lesson_2_OOP\hw_2-1> tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───inno
+│                   └───lesson
+│                           Main.java
+│
+└───target
+    │   less_2-1.0-SNAPSHOT.jar
+    │
+    ├───classes
+    │   └───ru
+    │       └───inno
+    │           └───lesson
+    │                   Main.class
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───maven-archiver
+    │       pom.properties
+    │
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+									//пересборка
+C:\app\java_lesson_2_OOP\hw_2-1> 
+jar tf target\less_2-1.0-SNAPSHOT.jar					//проверка
+
+PS C:\app\java_lesson_2_OOP\hw_2-1> 
+java -cp target\less_2-1.0-SNAPSHOT.jar ru.inno.lesson.Main       	//Запуск
+Hello World. HW-2-1
+
+PS C:\app\java_lesson_2_OOP\hw_2-1> 
+chcp 65001								//чтобы консоль переключилась на UTF-8. установку кодовой страницы 65001 (UTF-8) и передачу параметра "-Dfile.encoding=UTF-8"
+Active code page: 65001
+PS C:\app\java_lesson_2_OOP\hw_2-1> 
+java "-Dfile.encoding=UTF-8" -cp target\less_2-1.0-SNAPSHOT.jar ru.inno.lesson.Main
+Hello World. HW-2-1. Привет!
+PS C:\app\java_lesson_2_OOP\hw_2-1> 
+.\start_app.bat								//Запуск .bat
+@echo off
+chcp 65001 > nul
+java "-Dfile.encoding=UTF-8" -cp target\less_2-1.0-SNAPSHOT.jar ru.inno.lesson.Main
+=====================================================================================
+Информация о клиенте:
+Client{firstName='Иван', lastName='Петров', passport='4510 123456', accounts=[Account{accountNumber='40817810000000000001', balance=15000.5}, Account{accountNumber='40817810000000000002', balance=-500.0}]}
+
+--- Получение счёта по номеру ---
+Счёт с номером 40817810000000000001: Account{accountNumber='40817810000000000001', balance=15000.5}
+Счёт с номером несуществующий: null
+
+--- Все счета клиента ---
+[Account{accountNumber='40817810000000000001', balance=15000.5}, Account{accountNumber='40817810000000000002', balance=-500.0}]
+
+--- Суммарный остаток ---
+Сумма на всех счетах: 14500.5 руб.
+
+--- Счета с положительным остатком ---
+[Account{accountNumber='40817810000000000001', balance=15000.5}]
+
+--- Добавление счёта ---
+После добавления acc3:
+Client{firstName='Иван', lastName='Петров', passport='4510 123456', accounts=[Account{accountNumber='40817810000000000001', balance=15000.5}, Account{accountNumber='40817810000000000002', balance=-500.0}, Account{accountNumber='40817810000000000003', balance=0.0}]}
+
+--- Удаление счёта по номеру ---
+После удаления счёта с номером 40817810000000000002:
+Client{firstName='Иван', lastName='Петров', passport='4510 123456', accounts=[Account{accountNumber='40817810000000000001', balance=15000.5}, Account{accountNumber='40817810000000000003', balance=0.0}]}
+
+--- Увеличение остатка ---
+До увеличения: Account{accountNumber='40817810000000000001', balance=15000.5}
+После увеличения на 5000: Account{accountNumber='40817810000000000001', balance=20000.5}
+
+--- Уменьшение остатка ---
+До уменьшения: Account{accountNumber='40817810000000000001', balance=20000.5}
+После уменьшения на 3000: Account{accountNumber='40817810000000000001', balance=17000.5}
+
+--- Уменьшение остатка ---
+До уменьшения: Account{accountNumber='40817810000000000001', balance=20000.5}
+После уменьшения на 3000: Account{accountNumber='40817810000000000001', balance=17000.5}
+
+--- Попытка операции с чужим счётом ---
+Ошибка: счёт не принадлежит клиенту.
+
+--- Изменение номера счёта и остатка через сеттеры Account ---
+Счёт acc3 до изменений: Account{accountNumber='40817810000000000003', balance=0.0}
+Ошибка: счёт не принадлежит клиенту.
+
+--- Изменение номера счёта и остатка через сеттеры Account ---
+Счёт acc3 до изменений: Account{accountNumber='40817810000000000003', balance=0.0}
+Счёт acc3 после изменений: Account{accountNumber='40817810000000000333', balance=777.77}
+
+--- Клиент без счетов ---
+Client{firstName='Петр', lastName='Сидоров', passport='1234 567890', accounts=[]}
+Суммарный остаток: 0.0
+Счета с положительным остатком: []
+
+	

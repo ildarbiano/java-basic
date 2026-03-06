@@ -1,0 +1,112 @@
+Задание 12
+В данном ДЗ необходимо выполнить практическое задания при работе со строками в Java.
+
+
+Ожидаемый результат:
+приложить скрин только части результата выполнения программы в командной строке. Запуск выполнять используя предварительно собранный вами jar-архив.
+
+ВНИМАНИЕ!
+Высылать необходимо только часть результата выполнения в командной строке, где в имени пути обязательно должно быть название папки с вашим именем на латинице.
+Задание будет принято автоматически. После выполнения задания вы сможете увидеть верные ответы и выполнить самопроверку.
+
+-----------------
+Составить строку длины x, заполненную случайными символами: от «q» до «z», цифрами от 6 до 9 и знаками «?», «!» и «;». Через каждые 5 знаков вставить знак пробела. Необходимо заменить все вхождения символа «?» на «_» и вывести результат.
+
+Где переменная длины x - изменяемый входной параметр
+
+Пример кода, генерации случайной строки, где x – необходимая длина строки
+
+String arrayChar = "ewrwerpp[pkrwe;lmfslkdjjpwe”;
+StringBuilder randomString = new StringBuilder();
+for (int i = 0; i < X; i++) {
+  if (i % 7 == 0 && i > 0) {
+    randomString.append(" ");
+  }
+  int num = (int)(Math.random() * arrayChar.length());
+  randomString.append(arrayChar.charAt(num));
+}
+===============================================
+PS C:\app\java_lesson> 
+mkdir -p hw_1-12/src/main/java/ru/lesson/l_12						//Создание директорий
+mkdir -p hw_1-12\src\main\java\ru\lesson\l_12						//Создание директорий					
+New-Item -ItemType File -Force hw_1-13\src\main\java\ru\lesson\l_12\Main.java		//Создание директории, с файлом Main.java
+
+PS C:\app\java_lesson> 
+type hw_1-12/src/main/java/ru/lesson/l_12/Main.java					//Hello world
+PS C:\app\java_lesson\hw_1_12>								
+type pom.xml 										//Project, Plugin Maven
+
+PS C:\app\java_lesson\hw_1-12> 
+mvn clean package									//пересборка
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< ru.lesson:practic >--------------------------
+[INFO] Building practic 1.0-SNAPSHOT
+[INFO]   from pom.xml
+...
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.115 s
+[INFO] Finished at: 2026-02-10T11:56:10+03:00
+[INFO] ------------------------------------------------------------------------
+
+PS C:\app\java_lesson\hw_1-12> 
+jar tf target\practic-1.0-SNAPSHOT.jar							// проверка
+META-INF/
+META-INF/MANIFEST.MF
+ru/
+ru/lesson/
+ru/lesson/l_12/
+META-INF/maven/
+META-INF/maven/ru.lesson/
+META-INF/maven/ru.lesson/practic/
+ru/lesson/l_12/Main.class
+META-INF/maven/ru.lesson/practic/pom.xml
+META-INF/maven/ru.lesson/practic/pom.properties
+
+PS C:\app\java_lesson\hw_1-12> 
+java -cp target\practic-1.0-SNAPSHOT.jar ru.lesson.l_12.Main				// Запуск
+Hello World 12
+
+type hw_1-13\src\main\java\ru\lesson\l_12\Main.java					// Программа по заданию
+package ru.lesson.l_12;
+
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Main {
+    public static void main(String[] args) {
+        if (args.length == 0) {
+            System.err.println("Usage: java ru.lesson.l_12.Main <length>");
+            System.exit(1);
+        }
+
+        int x;
+        try {
+            x = Integer.parseInt(args[0]);
+            if (x < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid length: " + args[0]);
+            System.exit(2);
+            return;
+        }
+
+        String pool = "qrstuvwxyz6789?!;"; 						// набор допустимых символов
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        StringBuilder sb = new StringBuilder(x + x / 5 + 1);
+
+        for (int i = 0; i < x; i++) {
+            char c = pool.charAt(rnd.nextInt(pool.length()));
+            sb.append(c);
+            
+	// вставляем пробел после каждых 5 символов (и не в конце строки)
+            if ((i + 1) % 5 == 0 && i != x - 1) {
+                sb.append(' ');
+            }
+        }
+
+        // заменяем все вхождения '?' на '_'
+        String result = sb.toString().replace('?', '_');
+
+        System.out.println(result);
+    }
+}

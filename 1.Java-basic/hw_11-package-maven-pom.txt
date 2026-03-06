@@ -1,0 +1,358 @@
+Задание 11
+
+В данном ДЗ необходимо выполнить практическое задания при работе со строками в Java.
+
+Ожидаемый результат:
+приложить скрин только части результата выполнения программы в командной строке. Запуск выполнять используя предварительно собранный вами jar-архив.
+
+ВНИМАНИЕ!
+Высылать необходимо только часть результата выполнения в командной строке, где в имени пути обязательно должно быть название папки с вашим именем на латинице.
+
+-------------------------
+<a>
+Задание будет принято автоматически. После выполнения задания вы сможете увидеть верные ответы и выполнить самопроверку.
+
+Реализовать для типа String
+Дана строка, содержащая пробелы. Найдите, количество слов в строке (слово – это последовательность непробельных символов, первый и последний символ строки – не пробел). Найдите в ней самое длинное слово, выведите на экран это слово и его длину.
+
+Задание 1
+Дана строка:
+«Я прохожу курс по обучению основам программирования Java»
+
+Задание 2
+Дана строка:
+«В моей компании, где я работаю более 3000 сотрудников»
+
+Задание 3
+«В этом предложении два слова одинаковой размерности»
+
+
+============== package ==================
+PS C:\app\java_lesson> 
+mkdir -p hw_1-11/src/main/java/ru/lesson/l11					//создать каталог
+    Каталог: C:\app\java_lesson\hw_1-11\src\main\java\ru\lesson
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        06.02.2026     15:31                l11
+
+C:\app\java_lesson\hw_1-11\src\main\java\ru\lesson
+type Main.java									//создаём точку входа
+package ru.lesson.l11
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello World");
+    }
+        }
+
+C:\app\java_lesson\hw_1-11\
+type pom.xml									//Минимальный pom.xml, который полезно знать наизусть. Это твой «скелет»:
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ru.lesson</groupId>
+  <artifactId>demo</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+</project>
+
+mvn compile									//только компилирует class-файлы
+mvn clean package								//очищает проект, компилирует код и упаковывает его в артефакт (JAR, WAR или EAR-файл) и помещает его в директорию target текущего проекта.
+
+PS C:\app\java_lesson\hw_1-11> 
+tree /f										//поиск класса и архива
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───lesson
+│                   └───l11
+│                           Main.java
+│
+└───target
+    ├───classes									//архива нет, потому как В pom.xml нет <packaging>jar</packaging> Maven НЕ ОБЯЗАН делать jar
+    ├───generated-sources
+    │   └───annotations
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+
+C:\app\java_lesson\hw_1-11\
+type Main.java									//добавил <packaging>jar</packaging>
+
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>ru.lesson</groupId>
+  <artifactId>demo</artifactId>
+  <version>1.0-SNAPSHOT</version>						//добавил
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+</project>
+
+PS C:\app\java_lesson\hw_1-11> 
+mvn clean package								//пересобирал
+[INFO] Scanning for projects...
+....
+[INFO] BUILD SUCCESS
+
+PS C:\app\java_lesson\hw_1-11> 
+tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───lesson
+│                   └───l11
+│                           Main.java
+│
+└───target
+    │   demo-1.0-SNAPSHOT.jar							//появился архив
+    │
+    ├───classes
+    │   └───ru
+    │       └───lesson
+    │           └───l11
+    │                   Main.class
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───maven-archiver
+    │       pom.properties
+    │
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+PS C:\app\java_lesson\hw_1-11> 
+jar tf target\demo-1.0-SNAPSHOT.jar						//проверка
+META-INF/
+META-INF/MANIFEST.MF								//есть, но !? пустой! чтобы он формировался автоматически, нужно установить плагин maven-jar-plugin
+ru/
+ru/lesson/
+ru/lesson/l11/
+META-INF/maven/
+META-INF/maven/ru.lesson/
+META-INF/maven/ru.lesson/demo/
+ru/lesson/l11/Main.class							//на месте, указнном в package
+META-INF/maven/ru.lesson/demo/pom.xml
+META-INF/maven/ru.lesson/demo/pom.properties
+
+C:\app\java_lesson\hw_1-11\
+type Main.java									//добавил maven-jar-plugin
+...
+</properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>ru.lesson.l10.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+PS C:\app\java_lesson\hw_1-11> 
+mvn clean package								//пересобирал
+[INFO] Scanning for projects...
+....
+[INFO] BUILD SUCCESS
+
+PS C:\app\java_lesson\hw_1-11> 
+java -cp target\demo-1.0-SNAPSHOT.jar ru.lesson.l11.Main			//Запуск. Успех!
+Hello World
+
+================== выражение в аргументах запуска программы ==========================================
+package ru.lesson.l11;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        if (args.length == 0) {
+            System.out.println("Nothing to do");
+            return;
+        }
+
+        String input = args[0];
+
+        int wordCount = countWords(input);
+        String longestWord = findLongestWord(input);
+
+        System.out.println("Input was:");
+        System.out.println(input);
+        System.out.println();
+
+        System.out.println("How much word in this phrase: ="+ wordCount + ";");
+        System.out.println("The longest word: is -"+ longestWord + ";");
+        System.out.println("The length of the longest word: ="+ longestWord.length() + ".");
+    }
+
+    // Метод подсчёта слов
+    private static int countWords(String str) {
+        String[] words = str.split("\\s+");					//работает со строкой как с последовательностью символов
+        return words.length;
+    }
+
+    // Метод поиска самого длинного слова
+    private static String findLongestWord(String str) {
+        String[] words = str.split("\\s+");					//делит строку на части по шаблону (regex) ["Я", "прохожу", "курс", "Java"]
+
+        String longest = words[0];
+
+        for (String word : words) {
+            if (word.length() > longest.length()) {
+                longest = word;
+            }
+        }
+        return longest;
+    }
+}
+PS C:\app\java_lesson\hw_1-11> 
+mvn clean package                                                    			//сборка
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------------< ru.lesson:demo >---------------------------
+[INFO] Building demo 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+.....
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.221 s
+[INFO] Finished at: 2026-02-06T17:51:17+03:00
+[INFO] ------------------------------------------------------------------------
+PS C:\app\java_lesson\hw_1-11> 								//Запуск с параметрами
+java -cp target\demo-1.0-SNAPSHOT.jar ru.lesson.l11.Main "Я прохожу курс по обучению основам программирования Java"
+Input was:
+Я прохожу курс по обучению основам программирования Java
+
+How much word in this phrase: =8 words;
+The longest word: is -программирования;
+Я прохожу курс по обучению основам программирования Java
+
+How much word in this phrase: =8 words;
+The longest word: is -программирования;
+The length of the longest word: =16 symbols.
+------------------ split --------------------------
+String	объект-обёртка над char[]
+split 	это высокоуровневая операция,
+char	низкоуровневая единица данных
+split 	это метод класса String:
+	String[] split(String regex)
+Он:
+	НЕ работает с char напрямую
+	работает со строкой как с последовательностью символов
+	делит строку на части по шаблону (regex)
+		Пример:
+		String s = "Я прохожу курс Java";
+		String[] words = s.split(" ");
+Результат:
+["Я", "прохожу", "курс", "Java"]
+split 	работает внутри (упрощённо) Строка в Java внутри — это:
+	[Я][ ][п][р][о][х][о][ж][у][ ][к][у][р][с]
+split("\\s+") логически делает:
+	идёт по символам
+	проверяет каждый символ
+	если символ соответствует regex
+	заканчивает текущее слово
+	собирает слова в массив String[]
+⚠️ Но ты этого не видишь, потому что это:
+	уже реализовано
+	оптимизировано
+	протестировано
+========================= корректировака кода под вывод нескольких слов максимальной длины ==========
+package ru.lesson.l11;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        if (args.length == 0) {
+            System.out.println("-----Nothing to do-----");
+            return;
+        }
+
+        String input = args[0];
+
+        String[] words = input.split("\\s+");
+
+        int wordCount = words.length;
+        int maxLength = findMaxWordLength(words);
+        List<String> longestWords = findLongestWords(words, maxLength);
+
+        System.out.println("Input was:");
+        System.out.println(input);
+        System.out.println();
+
+        System.out.println("How much words in this phrase: = " + wordCount);
+        System.out.println("The longest word length: = " + maxLength + " symbols");
+
+        System.out.println("The longest word(s):");
+        for (String word : longestWords) {
+            System.out.println("- " + word);
+        }
+    }
+
+    // 1️⃣ Максимальная длина слова
+    private static int findMaxWordLength(String[] words) {
+        int max = words[0].length();
+        for (String word : words) {
+            if (word.length() > max) {
+                max = word.length();
+            }
+        }
+        return max;
+    }
+
+    // 2️⃣ Все слова максимальной длины
+    private static List<String> findLongestWords(String[] words, int maxLength) {
+        List<String> result = new ArrayList<>();
+        for (String word : words) {
+            if (word.length() == maxLength) {
+                result.add(word);
+            }
+        }
+        return result;
+    }
+}
+
+========================= выражение взятое из передаваемого файла ===================================
+
+
+

@@ -1,0 +1,195 @@
+PS C:\app\java_lesson\java-lesson-9> 
+mvn -v
+mvn : Имя "mvn" не распознано как имя командлета, функции, файла сценария или выполняемой программы. Проверьте правильность написания имени, а также наличие и правильность пути,  
+после чего повторите попытку.
+строка:1 знак:1
++ mvn -v
++ ~~~
+    + CategoryInfo          : ObjectNotFound: (mvn:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\app\java_lesson\java-lesson-9> 
+where mvn
+PS C:\app\java_lesson\java-lesson-9> 
+java -version
+java version "17.0.12" 2024-07-16 LTS						//Ok,от 17
+Java(TM) SE Runtime Environment (build 17.0.12+8-LTS-286)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.12+8-LTS-286, mixed mode, sharing)
+
+C:\install\apache-maven-3.9.12-bin\apache-maven-3.9.12\bin			//месторасположение
+Добавить в Path (а не отдельной переменной!)
+В окне Переменные среды
+В блоке Переменные пользователя
+Найди Path
+Изменить
+Создать
+Вставь: C:\install\apache-maven-3.9.12-bin\apache-maven-3.9.12\bin
+OK → OK → OK
+
+C:\Users\123>
+mvn -v										//
+Apache Maven 3.9.12 (848fbb4bf2d427b72bdb2471c22fced7ebd9a7a1)
+Maven home: C:\install\apache-maven-3.9.12-bin\apache-maven-3.9.12
+Java version: 17.0.12, vendor: Oracle Corporation, runtime: C:\Program Files\Java\jdk-17
+Default locale: ru_RU, platform encoding: Cp1251
+OS name: "windows 10", version: "10.0", arch: "amd64", family: "windows"
+========================= maven =================================================
+mvn archetype:generate							//Создание архитектуры, базовую структуру. Это официальный и самый «чистый» способ. Дальше Maven:
+			спросит groupId
+			artifactId
+			версию
+			создаст:
+				pom.xml
+				src/main/java
+				src/test/java
+
+mvn archetype:generate ^
+  -DgroupId=ru.lesson ^
+  -DartifactId=hw-1-11 ^
+  -DarchetypeArtifactId=maven-archetype-quickstart ^
+  -DinteractiveMode=false
+mvn compile								//только компилирует class-файлы
+mvn clean package							//очищает проект, компилирует код и упаковывает его в артефакт (JAR, WAR или EAR-файл) и помещает его в директорию target текущего проекта. 
+
+
+
+================== MANIFEST pom.xml JAR ==============================================
+MANIFEST.MF лежит, В jar: META-INF/MANIFEST.MF
+- ключевой компонент JAR-файла, который содержит метаданные, необходимые для правильного запуска приложения. Этот файл определяет точку входа в приложение, версию, зависимости и другую важную информацию. говорит JVM, что запускать. Некоторые области применения MANIFEST.MF:
+	-Создание исполняемых JAR-приложений — определение основного класса для запуска приложения;
+	-Управление зависимостями — указание внешних библиотек;
+	-Конфигурация приложения — предоставление информации во время выполнения;
+	-Безопасность и подписание — включение метаданных, связанных с безопасностью.
+MANIFEST описывается ТОЛЬКО через pom.xml
+MAVEN читает MANIFEST описанный через pom.xml всё, что должно попасть в JAR → pom.xml
+maven-jar-plugin 		плагин в pom.xml создают описание манифеста для запуска архива приложения.
+maven-shade-plugin		плагин в pom.xml создают описание манифеста для запуска архива приложения.
+
+PS C:\app\java_lesson\hw_1-10>
+jar xf target\hw-1-10-1.0-SNAPSHOT.jar META-INF/MANIFEST.MF			//выгрузка файла из архива
+
+C:\app\java_lesson\hw_1-10\
+type META-INF\MANIFEST.MF							//нет указания точки входа Main.class. Для автоматического формирования Манифеста, требуется добавить плагин maven-jar-plugin или плагин maven-shade-plugin. Эти плагины создают описание манифеста для запуска архива приложения.
+	Manifest-Version: 1.0
+	Created-By: Maven JAR Plugin 3.4.1
+	Build-Jdk-Spec: 17
+JVM делает:
+	открывает jar
+	читает META-INF/MANIFEST.MF
+	ищет Main-Class
+	загружает класс
+	вызывает public static void main(String[] args)
+PS C:\app\java_lesson\hw_1-10> 
+jar cfm app.jar META-INF\MANIFEST.MF -C target\classes .			//пересобрать архив без MAVEN. Изменения в META-INF/MANIFEST.MF, сделанные вручную, попадут в новый архив.
+PS C:\app\java_lesson\hw_1-10> 
+java -jar app.jar								//новый архив
+Hello World fork Maven								//отработал
+
+
+============== package =================================
+определяет где класс живёт логически
+
+============== jar ====================================
+это просто zip. структура внутри критична.
+java -cp target\hw-1-10-1.0-SNAPSHOT.jar Main					//Progect
+java -cp target\hw-1-10-1.0-SNAPSHOT.jar ru.lesson.l10.Main			//Package
+
+============== fat jar ===============================
+production-стандарт
+один файл = одно приложение
+java -jar target\hw-1-10-1.0-SNAPSHOT-shaded.jar				//работает без -cp
+
+============= плагин maven-jar-plugin ===========================
+учебный проект!
+участвует в фазе package
+создаёт обычный jar
+управляет MANIFEST.MF
+НЕ включает зависимости
+Результат:
+	hw-1-10-1.0-SNAPSHOT.jar
+java -cp target\hw-1-10-1.0-SNAPSHOT.jar ru.lesson.l10.Main			//запуск приложения
+============= плагин maven-shade-plugin =========================
+В реальных проектах, PRODUCTION, обычный jar почти не используют
+тоже работает на фазе package
+перепаковывает jar
+добавляет все зависимости
+может:
+	заменить manifest
+	перезаписать jar
+	создать hw-1-10-1.0-SNAPSHOT-shaded.jar
+java -jar target\hw-1-10-1.0-SNAPSHOT-shaded.jar				//запуск приложения
+------------- если выбирать между maven-jar-plugin и maven-shade-plugin ----------------------
+maven-shade-plugin
+└── создаёт jar
+└── пишет manifest
+└── кладёт зависимости
+! меньше точек отказа	
+
+============= pom.xml =======================================================
+У <project> есть строгая структура:	
+<project>
+    <modelVersion/>
+
+    <groupId/>
+    <artifactId/>
+    <version/>
+
+    <properties/>
+
+    <dependencies/>
+
+    <build>
+        <plugins>
+            <plugin/>
+        </plugins>
+    </build>
+
+</project>
+после создания блока:
+    <build>
+        <plugins>
+            <plugin/>
+        </plugins>
+    </build>
+mvn clean package
+java -jar target\hw-1-10-1.0-SNAPSHOT.jar
+PS C:\app\java_lesson\hw_1-10> tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   app.jar					//тренировочный архив, не влияет на проект.
+│   pom.xml
+│
+├───META-INF
+│       MANIFEST.MF
+│
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───lesson
+│                   └───l10
+│                           Main.java
+│
+└───target
+    │   hw-1-10-1.0-SNAPSHOT.jar
+    │
+    ├───classes
+    │   └───ru
+    │       └───lesson
+    │           └───l10
+    │                   Main.class
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───maven-archiver
+    │       pom.properties
+    │
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+
+ 						

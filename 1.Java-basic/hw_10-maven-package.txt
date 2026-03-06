@@ -1,0 +1,413 @@
+Задание 10
+В данном ДЗ необходимо выполнить практическое задания при работе с двумерным массивом в Java.
+
+Ожидаемый результат: приложить скрин только части результата выполнения программы в командной строке. Запуск выполнять используя предварительно собранный вами jar-архив.
+
+ВНИМАНИЕ! Высылать необходимо только часть результата выполнения в командной строке, где в имени пути обязательно должно быть название папки с вашим именем на латинице.
+Задание будет принято автоматически. Поверка задания не предусмотрена. 
+
+---------------------------
+Дана матрица M x N. Необходимо инициализировать её случайными числами (тип данных выбрать самостоятельно). Программа должна
+выводить матрицу в наглядном виде (см. пример ниже).
+
+Предусмотреть передачу размерности M и N через аргументы входной точки программы (main метод). Если аргументы не переданы, проводить инициализацию размерности случайными числами в диапазоне от 2 до 10.
+
+123  10   1
+14   221  17
+1    15   125
+17   1    14
+Требуется:
+·       Найти минимальный элемент в каждой строке и вывести его.
+·       Найти среднее значение для всех элементов матрицы.
+===========================================================
+PS C:\app\java_lesson\hw_1-10> 
+tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+└───src
+    └───main
+        └───java
+            └───ru
+                └───lesson
+                    └───l10
+                            Main.java
+=============== maven ============================
+Maven НЕ запускает Java-файлы
+Maven работает ТОЛЬКО с проектами
+Проект = pom.xml + src/main/java
+package ↔ директории обязаны совпадать
+=============== pom.xml ===========================
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ru.lesson</groupId>
+    <artifactId>hw-1-10</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
+
+</project>
+PS C:\app\java_lesson\hw_1-10> 
+tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│
+└───src
+    └───main
+        └───java
+            └───ru
+                └───lesson
+                    └───l10
+                            Main.java
+PS C:\app\java_lesson\hw_1-10> 
+mvn compile									//только компилирует class-файлы
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< ru.lesson:hw-1-10 >--------------------------
+[INFO] Building hw-1-10 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ hw-1-10 ---
+[WARNING] Using platform encoding (Cp1251 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\app\java_lesson\hw_1-10\src\main\resources
+[INFO]
+[INFO] --- compiler:3.13.0:compile (default-compile) @ hw-1-10 ---
+[INFO] Recompiling the module because of changed source code.
+[WARNING] File encoding has not been set, using platform encoding windows-1251, i.e. build is platform dependent!
+[INFO] Compiling 1 source file with javac [debug target 17] to target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.602 s
+[INFO] Finished at: 2026-02-06T05:14:44+03:00
+[INFO] ------------------------------------------------------------------------
+
+PS C:\app\java_lesson\hw_1-10> 
+java -cp target\classes ru.lesson.l10.Main
+Error: Could not find or load main class ru.lesson.l10.Main
+Caused by: java.lang.ClassNotFoundException: ru.lesson.l10.Main
+======= архива (jar) действительно нет, потому что мы его ещё не настроили. Maven по умолчанию компилирует, но не делает запускаемый jar. ==================
+
+PS C:\app\java_lesson\hw_1-10> 
+tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│   
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───lesson
+│                   └───l10
+│                           Main.java
+│
+└───target
+    ├───classes
+    │       Main.class
+    │
+    ├───generated-sources
+    │   └───annotations
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+PS C:\app\java_lesson\hw_1-10> 
+mvn clean package								//Maven создаст: target/
+												 └── hw-1-10-1.0-SNAPSHOT.jar
+	❗ Но:
+		это НЕ executable jar
+		внутри нет Main-Class
+		команда java -jar ... не сработает
+		jar без Main-Class
+		jar без Main-Class → не запускается
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< ru.lesson:hw-1-10 >--------------------------
+[INFO] Building hw-1-10 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ hw-1-10 ---
+[INFO] Deleting C:\app\java_lesson\hw_1-10\target
+[INFO]
+[INFO] --- resources:3.3.1:resources (default-resources) @ hw-1-10 ---
+[INFO] skip non existing resourceDirectory C:\app\java_lesson\hw_1-10\src\main\resources
+[INFO]
+[INFO] --- compiler:3.13.0:compile (default-compile) @ hw-1-10 ---
+[INFO] Recompiling the module because of changed source code.
+[WARNING] File encoding has not been set, using platform encoding windows-1251, i.e. build is platform dependent!
+[INFO] Compiling 1 source file with javac [debug target 17] to target\classes
+[INFO]
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ hw-1-10 ---
+[WARNING] Using platform encoding (Cp1251 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\app\java_lesson\hw_1-10\src\test\resources
+[INFO]
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ hw-1-10 ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.2.5:test (default-test) @ hw-1-10 ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.4.1:jar (default-jar) @ hw-1-10 ---
+[INFO] Building jar: C:\app\java_lesson\hw_1-10\target\hw-1-10-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.209 s
+[INFO] Finished at: 2026-02-06T05:19:38+03:00
+[INFO] ------------------------------------------------------------------------
+PS C:\app\java_lesson\hw_1-10> 
+tree /f
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   pom.xml
+│
+├───src
+│   └───main
+│       └───java
+│           └───ru
+│               └───lesson
+│                   └───l10
+│                           Main.java
+│
+└───target
+    │   hw-1-10-1.0-SNAPSHOT.jar
+    │
+    ├───classes
+    │       Main.class
+    │
+    ├───generated-sources
+    │   └───annotations
+    ├───maven-archiver
+    │       pom.properties
+    │
+    └───maven-status
+        └───maven-compiler-plugin
+            └───compile
+                └───default-compile
+                        createdFiles.lst
+                        inputFiles.lst
+--------------------------------------
+JVM открывает hw-1-10-1.0-SNAPSHOT.jar
+Читает META-INF/MANIFEST.MF
+Ищет строку:
+Main-Class: ru.lesson.l10.Main
+Если её нет → ❌ JVM не знает, что запускать
+👉 никаких аргументов вроде --main или -m тут нет.
+-------------------------------------------------
+PS C:\app\java_lesson\hw_1-10> 
+mvn clean package							//очищает проект, компилирует код и упаковывает его в артефакт (JAR, WAR или EAR-файл) и помещает его в директорию target текущего проекта. 
+
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------------< ru.lesson:hw-1-10 >--------------------------
+[INFO] Building hw-1-10 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ hw-1-10 ---
+[INFO] Deleting C:\app\java_lesson\hw_1-10\target
+[INFO]
+[INFO] --- resources:3.3.1:resources (default-resources) @ hw-1-10 ---
+[WARNING] Using platform encoding (Cp1251 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\app\java_lesson\hw_1-10\src\main\resources
+[INFO]
+[INFO] --- compiler:3.13.0:compile (default-compile) @ hw-1-10 ---
+[INFO] Recompiling the module because of changed source code.
+[WARNING] File encoding has not been set, using platform encoding windows-1251, i.e. build is platform dependent!
+[INFO] Compiling 1 source file with javac [debug target 17] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ hw-1-10 ---
+[WARNING] Using platform encoding (Cp1251 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory C:\app\java_lesson\hw_1-10\src\test\resources
+[INFO]
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ hw-1-10 ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- surefire:3.2.5:test (default-test) @ hw-1-10 ---
+[INFO] No tests to run.
+[INFO]
+[INFO] --- jar:3.4.1:jar (default-jar) @ hw-1-10 ---
+[INFO] Building jar: C:\app\java_lesson\hw_1-10\target\hw-1-10-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.052 s
+[INFO] Finished at: 2026-02-06T05:36:06+03:00
+[INFO] ------------------------------------------------------------------------
+PS C:\app\java_lesson\hw_1-10> 
+jar tf target\hw-1-10-1.0-SNAPSHOT.jar							//проверка
+META-INF/
+META-INF/MANIFEST.MF
+META-INF/maven/
+META-INF/maven/ru.lesson/
+META-INF/maven/ru.lesson/hw-1-10/
+Main.class										//в корне, а не C:\app\java_lesson\hw_1-10\src\main\java\ru\lesson\l10. Это значит ровно одно: Main.java скомпилировался БЕЗ package
+META-INF/maven/ru.lesson/hw-1-10/pom.xml
+META-INF/maven/ru.lesson/hw-1-10/pom.properties
+
+PS C:\app\java_lesson\hw_1-10> 
+java -cp target\hw-1-10-1.0-SNAPSHOT.jar Main						// чтобы проверить
+Hello World fork Maven
+
+====== package ru.lesson.l10; ========================
+PS C:\app\java_lesson\hw_1-10> 
+mvn clean package
+[INFO] Scanning for projects...
+...
+....
+[INFO]
+[INFO] --- jar:3.4.1:jar (default-jar) @ hw-1-10 ---
+[INFO] Building jar: C:\app\java_lesson\hw_1-10\target\hw-1-10-1.0-SNAPSHOT.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  3.121 s
+[INFO] Finished at: 2026-02-06T05:46:12+03:00
+[INFO] ------------------------------------------------------------------------
+PS C:\app\java_lesson\hw_1-10> 
+jar tf target\hw-1-10-1.0-SNAPSHOT.jar
+META-INF/
+META-INF/MANIFEST.MF
+ru/
+ru/lesson/
+ru/lesson/l10/
+META-INF/maven/
+META-INF/maven/ru.lesson/
+META-INF/maven/ru.lesson/hw-1-10/
+ru/lesson/l10/Main.class								//на своём месте
+META-INF/maven/ru.lesson/hw-1-10/pom.xml
+META-INF/maven/ru.lesson/hw-1-10/pom.properties
+
+PS C:\app\java_lesson\hw_1-10> 
+java -jar target\hw-1-10-1.0-SNAPSHOT.jar
+no main manifest attribute, in target\hw-1-10-1.0-SNAPSHOT.jar				//
+PS C:\app\java_lesson\hw_1-10> 
+java -cp target\hw-1-10-1.0-SNAPSHOT.jar ru.lesson.l10.Main				//с указанием точки входа
+Hello World fork Maven
+======================
+main() 		— оркестратор
+каждая задача 	- отдельный метод
+---------------------------------
+package ru.lesson.l10;
+
+import java.util.Random;
+
+public class Main {
+
+    private static final int MIN_SIZE = 2;			//параметры из аргументов запуска приложения, или зашиваются писателем.
+    private static final int MAX_SIZE = 10;
+    private static final int RANDOM_BOUND = 300;
+
+    public static void main(String[] args) {
+        Random random = new Random();
+
+        int m = getMatrixSize(args, 0, random);
+        int n = getMatrixSize(args, 1, random);
+
+        int[][] matrix = createMatrix(m, n, random);
+
+        printMatrix(matrix);
+        printMinInRows(matrix);
+        printAverage(matrix);
+    }
+
+    // Определение размерности матрицы из константы
+    private static int getMatrixSize(String[] args, int index, Random random) {
+        if (args.length > index) {
+            return Integer.parseInt(args[index]);
+        }
+        return random.nextInt(MAX_SIZE - MIN_SIZE + 1) + MIN_SIZE;
+    }
+
+    // Создание и инициализация матрицы
+    private static int[][] createMatrix(int m, int n, Random random) {
+        int[][] matrix = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                matrix[i][j] = random.nextInt(RANDOM_BOUND) + 1;
+            }
+        }
+        return matrix;
+    }
+
+    // Печать матрицы
+    private static void printMatrix(int[][] matrix) {
+        System.out.println("Matrix (" + matrix.length + " x " + matrix[0].length + "):");
+        for (int[] row : matrix) {
+            for (int value : row) {
+                System.out.printf("%5d", value);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    // Минимальный элемент в каждой строке
+    private static void printMinInRows(int[][] matrix) {
+        System.out.println("Minimum in each row:");
+        for (int i = 0; i < matrix.length; i++) {
+            int min = matrix[i][0];
+            for (int j = 1; j < matrix[i].length; j++) {
+                if (matrix[i][j] < min) {
+                    min = matrix[i][j];
+                }
+            }
+            System.out.println("Row " + (i + 1) + ": " + min);
+        }
+        System.out.println();
+    }
+
+    // Среднее значение элементов матрицы
+    private static void printAverage(int[][] matrix) {
+        long sum = 0;
+        int count = 0;
+
+        for (int[] row : matrix) {
+            for (int value : row) {
+                sum += value;
+                count++;
+            }
+        }
+
+        double average = (double) sum / count;
+        System.out.printf("Average value: %.2f%n", average);
+    }
+}
+------------------
+Что делает JVM
+	JVM запускает класс из Main-Class
+	Создаёт массив строк:
+		String[] args = {"5", "2"};
+	Вызывает:
+		main(args);
+⚠️ НЕ подстановка в код
+⚠️ НЕ магия
+✔ обычный вызов метода
+	Фактически JVM делает это:
+		Main.main(new String[]{"5", "2"});
+--------------------------------------------------
+Важно понять:
+	java Код не меняется, private static final int MIN_SIZE = 2; берётся из памяти JVM. Константы - во время загрузки класса;
+	Значения передаются, getMatrixSize, в память JVM. Аргументы - при запуске программы;
+	При каждом запуске — новый вызов main()
+📌 Java-программа — это:
+	«Один и тот же байткод, разные входные данные»
+
+

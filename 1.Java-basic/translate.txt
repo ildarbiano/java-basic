@@ -1,0 +1,18 @@
+New-Item -ItemType File -Force translate\src\main\java\ru\translate\Main.java		//Создание директории, с файлом Main.java
+New-Item -ItemType File -Force translate\pom.xml					//Создание pom.xml для maven
+
+PS C:\app\java_lesson\translate> 
+mvn clean package									//Пересборка архива
+mvn clean compile									//только компиляция
+tree /f
+jar tf target\experience-1.0-SNAPSHOT.jar						//проверка maven
+java -cp target\experience-1.0-SNAPSHOT.jar ru.translate.Main				//Запуск
+================================================================================================
+Требуется Java код, чтобы прочитать текст из файла C:\app\java_lesson\translate\input.txt. Посчить количество предложений. Посчитать количество слов. Вывести список самых длинных предложений. Указать самое длинное слово в тексте и всё предложение, в котором оно находится, посредством выделения его заглавными буквами в выводе. Вывод передать в текстовый файл C:\app\java_lesson\translate\output.txt, озаглавив его датаой и временем вывода. Последующие выводы должны добавлять, а перезатирать данные C:\app\java_lesson\translate\output.txt
+=====================================
+
+PS C:\app\java_lesson\translate> 
+java -cp target\text-analyzer-1.0.0.jar ru.translate.Main
+Определена кодировка файла: UTF-8
+? Анализ завершен успешно!
+? Результаты сохранены в: C:\app\java_lesson\translate\output.txt

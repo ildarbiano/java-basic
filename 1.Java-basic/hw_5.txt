@@ -1,0 +1,133 @@
+PS C:\app\java_lesson> javac src/ru/inno/lesson/My2Class_4.java My2Class.java		--компиляция
+PS C:\app\java_lesson\lesson_5> jar cfe my5app.jar My2Class My2Class.class src/		--архив. Создаем JAR с указанием главного класса
+PS C:\app\java_lesson\lesson_5> tree /F
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+│   My2Class.class
+│   My2Class_comments.java
+│   my5app.jar
+│
+└───src
+    └───ru
+        └───inno
+            └───lesson
+                    My2Class_4.class
+                    My2Class_4.java
+                    My2Class_4_comment.java
+PS C:\app\java_lesson\lesson_5> 
+jar tf my5app.jar							-- Проверить содержимое
+META-INF/
+META-INF/MANIFEST.MF
+My2Class.class
+src/
+src/ru/
+src/ru/inno/
+src/ru/inno/lesson/
+src/ru/inno/lesson/My2Class_4.class
+src/ru/inno/lesson/My2Class_4.java
+src/ru/inno/lesson/My2Class_4_comment.java
+PS C:\app\java_lesson\lesson_5> 
+java -jar my5app.jar							-- запуск программы.
+--- Testing class: MySecondClass. obj1 ---
+obj1: a = 5, b = 3
+Result for: obj1: 8
+Checking: 5 + 3 = 8
+Result: true
+
+--- Another Object. obj2 ---
+obj2: a = 10, b = 7
+Result for:obj2: 17
+Checking: 10 + 7 = 17
+Result: true
+
+--- testing. obj2 after changing ---
+obj2 after changing: a = 20, b = 30
+New result: 50
+
+Вы создали идеальную структуру Java-проекта:
+text
+C:\app\java_lesson\lesson_5\
+├── src/                          # ✅ Исходные коды (.java)
+│   └── main/
+│       └── java/
+│           ├── My2Class.java     # ✅ Main класс
+│           └── src/              # ✅ Package начинается здесь
+│               └── ru/
+│                   └── inno/
+│                       └── lesson/
+│                           └── My2Class_4.java  # ✅ Класс в package
+└── target/                       # ✅ Скомпилированные файлы
+    ├── classes/                  # ✅ .class файлы
+    │   ├── My2Class.class
+    │   └── src/
+    │       └── ru/
+    │           └── inno/
+    │               └── lesson/
+    │                   └── My2Class_4.class
+    └── my5app.jar                # ✅ Готовый JAR
+
+================СКОМПЕЛИРУЕМ ЗАНОВО:
+PS C:\app\java_lesson\lesson_5> 
+javac -d target/classes src/main/java/My2Class.java src/main/java/src/ru/inno/lesson/My2Class_4.java
+
+================Создание JAR:
+PS C:\app\java_lesson\lesson_5> 
+jar --create --file=target/my5app.jar --main-class=My2Class -C target/classes .		-- создание архива
+jar tf target/my5app.jar								-- Проверить содержимое
+================Запуск программы:
+PS C:\app\java_lesson\lesson_5> 
+java -jar target/my5app.jar
+--- Testing class: MySecondClass. obj1 ---
+obj1: a = 5, b = 3
+Result for: obj1: 8
+Checking: 5 + 3 = 8
+Result: true
+
+--- Another Object. obj2 ---
+obj2: a = 10, b = 7
+Result for:obj2: 17
+Checking: 10 + 7 = 17
+Result: true
+
+--- testing. obj2 after changing ---
+obj2 after changing: a = 20, b = 30
+New result: 50
+
+PS C:\app\java_lesson\lesson_5> tree /F
+Структура папок тома system
+Серийный номер тома: AABA-AAB0
+C:.
+├───src
+│   └───main
+│       └───java
+│           │   My2Class.java
+│           │   
+│           └───src
+│               └───ru
+│                   └───inno
+│                       └───lesson
+│                               My2Class_4.java
+│
+└───target
+    │   my5app.jar
+    │
+    └───classes
+        │   My2Class.class
+        │
+        └───src
+            └───ru
+                └───inno
+                    └───lesson
+                            My2Class_4.class
+🔮 Следующие шаги (по желанию):
+Добавить README.md с описанием проекта
+Создать .gitignore чтобы не коммитить target/
+Добавить тесты в src/test/java/
+Использовать Maven или Gradle для автоматизации
+
+💡 Поздравляю!
+Вы создали идеально структурированный Java-проект! Такая структура используется в:
+Корпоративных проектах
+Open-source библиотеках
+Профессиональной разработке

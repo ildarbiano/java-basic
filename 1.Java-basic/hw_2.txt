@@ -1,0 +1,114 @@
+----------------- versions ------
+C:\Program Files\Java\jdk-17\bin\*
+PS C:\app\java_lesson> jar --version
+jar 17.0.12
+PS C:\app\java_lesson> javac --version
+javac 17.0.12
+PS C:\app\java_lesson> java --version
+java 17.0.12 2024-07-16 LTS
+Java(TM) SE Runtime Environment (build 17.0.12+8-LTS-286)
+Java HotSpot(TM) 64-Bit Server VM (build 17.0.12+8-LTS-286, mixed mode, sharing)
+--------------------------------------------------------------------------------
+----------------- компиляция ---------------------------------------------------
+C:\app\java_lesson>dir
+ Том в устройстве C имеет метку system
+ Серийный номер тома: AABA-AAB0
+ Содержимое папки C:\app\java_lesson
+26.01.2026  20:35    <DIR>          .
+26.01.2026  20:35    <DIR>          ..
+26.01.2026  20:32    <DIR>          .idea
+26.01.2026  20:35               408 My1Class.java
+               1 файлов            408 байт
+               3 папок  786 930 331 648 байт свободно
+
+C:\app\java_lesson>javac My1Class.java					//компиляция класса
+C:\app\java_lesson>dir
+ Том в устройстве C имеет метку system
+ Серийный номер тома: AABA-AAB0
+ Содержимое папки C:\app\java_lesson
+26.01.2026  20:36    <DIR>          .
+26.01.2026  20:36    <DIR>          ..
+26.01.2026  20:32    <DIR>          .idea
+26.01.2026  20:36               421 My1Class.class
+26.01.2026  20:35               408 My1Class.java
+               2 файлов            829 байт
+               3 папок  786 930 270 208 байт свободно
+
+C:\app\java_lesson>
+-------------------------------------
+----------------- создание и описание класса -------------------------------------------------------
+C:\app\java_lesson>type My1Class.java
+public class My1Class {                       				//описание класса с именем
+    public static void main(String[] args) {   				//точка входа, метод main, с жёстко заданной сигнатурой.
+        System.out.println("Hello World");     				//функция класса PrintStream, по статическим полем out класса System
+    }
+}
+
+C:\app\java_lesson>type My1Class.class
+╩■║╛=↔
+☻♥♦♀♣♠☺►java/lang/Object☺♠<init>☺♥()V
+♀♂♀☺►java/lang/System☺♥out☺§Ljava/io/PrintStream♫☺♂Hello World
+►◄↕♀‼¶☺‼java/io/PrintStream☺println☺§(Ljava/lang/String;)V▬My1Class☺♦Code☺☼LineNumberTable☺♦main☺▬([Ljava/lang/String;)V☺
+My1Class.java!§☻☻☺♣♠☺↨↔☺☺♣*╖☺▒☺↑♠☺☺     ↓
+C:\app\java_lesson>
+-------------------
+----------------- запуск программы ------------------------------------------------------------------------------
+C:\app\java_lesson>java My1Class					//запуск программы из файла с байт-кодом	
+Hello World
+C:\app\java_lesson>
+-------------------
+----------------- архивирование программы --------------------------------
+PS C:\app\java_lesson> jar cfe hw2programm.jar .\My1Class .\My1Class.class
+PS C:\app\java_lesson> dir
+    Каталог: C:\app\java_lesson
+Mode                 LastWriteTime         Length Name                                                                                 
+----                 -------------         ------ ----                                                                                 
+d-----        27.01.2026     10:35                .idea
+-a----        27.01.2026     10:36            772 hw2programm.jar                                                                      
+-a----        26.01.2026     20:36            421 My1Class.class
+-a----        26.01.2026     20:35            408 My1Class.java
+можно ли запускать JAR без указания класса?				//Да, можно! Но для этого в JAR должен быть правильный MANIFEST.MF.
+Пример 1: JAR с Main-Class в манифесте. Если при создании JAR вы указали главный класс:
+	bash
+	jar cfe hw2programm.jar My1Class My1Class.class
+Тогда в META-INF/MANIFEST.MF появится строка:
+	text
+	Main-Class: My1Class
+И запускать можно просто:
+	bash
+	java -jar hw2programm.jar
+---------------------------------------------------------------
+----------------- запуск архива программы ----------------------------------------------------------
+PS C:\app\java_lesson> java -classpath hw2programm.jar My1Class		// запуск программы из архива, собранного недостоверно
+Hello World
+PS C:\app\java_lesson> 
+java 					— запускает JVM. Java не знает автоматически, что в архиве и какой класс запускать. В одном JAR-файле может быть десятки или сотни классов. Java нужно явно указать, какой из них запускать.
+-classpath hw2programm.jar 		— говорит JVM, где искать классы
+My1Class 				— указывает, какой именно класс запустить
+PS C:\app\java_lesson> java -jar hw2programm.jar			//запуск программы из правильно собранного архива
+Hello World
+--------------------------------------------
+----------- Что внутри JAR-файла -----------
+text
+hw2programm.jar								// нейросеть показала, сам не видел.
+├── My1Class.class
+├── My2Class.class
+├── utils/
+│   └── Helper.class
+└── META-INF/
+    └── MANIFEST.MF
+PS C:\app\java_lesson> jar tf .\hw2programm.jar				// Посмотреть содержимое
+META-INF/
+META-INF/MANIFEST.MF
+My1Class.class
+PS C:\app\java_lesson> jar tvf .\hw2programm.jar			// Показать с подробностями
+     0 Tue Jan 27 12:41:28 MSK 2026 META-INF/
+    89 Tue Jan 27 12:41:28 MSK 2026 META-INF/MANIFEST.MF
+   421 Mon Jan 26 20:36:18 MSK 2026 My1Class.class
+PS C:\app\java_lesson> jar xf .\hw2programm.jar META-INF/MANIFEST.MF	// Распаковка архива
+PS C:\app\java_lesson> cat .\META-INF\MANIFEST.MF			// всё открывается в read-only режиме. Для редактирования нужно пересобирать JAR.
+Manifest-Version: 1.0
+Created-By: 17.0.12 (Oracle Corporation)
+Main-Class: My1Class
+
+

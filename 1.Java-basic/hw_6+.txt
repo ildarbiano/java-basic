@@ -1,0 +1,247 @@
+В данном ДЗ нам необходимо будет реализовать вычисление математического примера.
+
+Переменные a, b, c, d, m, n, p – изменяемые входные параметры.
+Переменная e является числом Эйлера.
+Число Эйлера (обозначается буквой \(e\)) — это фундаментальная математическая константа, основание натурального логарифма, приблизительно равная \(2,71828\). Это иррациональное и трансцендентное число, значение которого \(e\approx 2,718281828\dots \). Оно играет ключевую роль в математическом анализе, описывая процессы непрерывного роста, такие как сложные проценты, радиоактивный распад или рост населения. 
+
+Реализовать вычисление выражения через передачу значений аргументов в main метод. При вычислениях использовать тип BigDecimal. Для вычисления значения логарифма, возведения в степень использовать класс Math и его статические методы.
+
+Обратите внимание, что возвращаемый результат методов данного класса имеет тип double.
+Ожидаемый результат: необходимо указать получившийся результат вычисления переменной X при следующих значениях:
+a = b = c =d = m = n = p = 5
+
+ВНИМАНИЕ!  При операциях деления использовать режим округления (RoundingMode.UP) к «ближайшему соседу», если только оба соседа не равноудалены, и в этом случае округление вверх. Округление до двух знаков после запятой.
+ПРИМЕР: число 5.5(3) после округления = 5.4
+Некоторые методы класса BigDecimal, которые используются для выполнения арифметических операций:
+add(BigDecimal other) 				— возвращает сумму двух чисел +;
+subtract(BigDecimal other) 			— возвращает разность двух чисел -;
+multiply(BigDecimal other) 			— возвращает произведение двух чисел *;
+divide(BigDecimal other) 			— возвращает частное двух чисел;
+divide(BigDecimal other, RoundingMode mode) 	— возвращает результат деления двух чисел /, округлённый в соответствии с режимом mode.
+===========================================
+===================== MathCalculatorWithHalfUp ===================================
+PS C:\app\java_lesson\task_1-6> javac MathCalculatorWithHalfUp.java
+PS C:\app\java_lesson\task_1-6> java MathCalculatorWithHalfUp 2.0 3.0 1.5 2.5 2 3 1
+Income data:
+a = 2.0
+b = 3.0
+c = 1.5
+d = 2.5
+m = 2
+n = 3
+p = 1
+------
+Smart result: 76.13762372876626859996854793545487952021057455436286
+Result with  (HALF_UP, 2 simbol): 76.14
+
+===================== AllFivesCalculator ========================================
+PS C:\app\java_lesson\task_1-6> javac AllFivesCalculator.java
+PS C:\app\java_lesson\task_1-6> java AllFivesCalculator
+Result, if all are = 5:
+X = 36.48
+===========================================================================================
+===========C:\app\java_lesson\task_1-6\MathCalculatorWithHalfUp.java=======================
+PS C:\app\java_lesson\task_1-6\MathCalculatorWithHalfUp.java
+
+import java.math.BigDecimal;								//означает, что в программе используется класс BigDecimal из пакета java.math. Этот класс предназначен для работы с дробными числами с произвольной точностью. В отличие от примитивных типов данных (int, long, float, double), которые представляют числа с ограниченной точностью, BigDecimal предоставляет точные результаты при выполнении арифметических операций с десятичными числами.
+
+import java.math.MathContext;								//означает, что в программу импортирован класс MathContext из пакета java.math. MathContext — класс конфигурации, который определяет правила точности и округления для арифметики BigDecimal. Можно думать о нём как о математическом «контексте», который указывает Java, как выполнять расчёты с высокой точностью. Цель MathContext — дать разработчикам явный контроль над поведением арифметических операций, чтобы результаты были последовательными и предсказуемыми в разных системах и масштабах. 
+
+import java.math.RoundingMode;								//означает, что в программе доступен класс RoundingMode, который определяет режимы округления для числовых операций, способных отбрасывать точность. Каждый режим указывает, как вычислять наименьшую значимую цифру результата округления. Если возвращается меньше цифр, чем нужно для представления точного результата, отбрасываемые цифры называются отбрасываемой дробью, независимо от их вклада в значение числа.
+
+public class MathCalculatorWithHalfUp {
+
+    // Константы - это цифры, фиксированные значения, в формуле условий. Они определены условием задачи, то есть формулой. Они облегчают читаемость кода. Повышают производительность
+    private static final BigDecimal BIG_123 = new BigDecimal("123");			//final - гарантирует, что значение не измениться случайно.
+    private static final BigDecimal BIG_527 = new BigDecimal("527");
+    private static final BigDecimal BIG_856 = new BigDecimal("856");
+
+    public static void main(String[] args) {							//Точка входа
+
+        if (args.length != 7) {									//Проверяем количество входящих параметров. Условие if (args.length != 7) проверяет, что длина массива не равна 7, и, если это условие истинно (равно true), срабатывает код, который помещён далее после условия внутри фигурных скобок, то есть предупреждение и подсказка: 
+            System.out.println("Use: java MathCalculatorWithHalfUp a b c d m n p");
+            System.out.println("Пример: java MathCalculatorWithHalfUp 2.0 3.0 1.5 2.5 2 3 1");
+            System.out.println("\nОкругление: HALF_UP (к ближайшему, при равенстве - вверх)");
+            System.out.println("Точность: 2 знака после запятой");
+            return;										//return в классе main немедленно завершает программую
+        }
+
+        try {											//Парсим входные параметры, только в том случае, если условие if (args.length != 7) было false:
+            BigDecimal a = new BigDecimal(args[0]);						//new BigDecimal(args[0]) создаёт новый объект класса BigDecimal. BigDecimal(...)-вызов конструктора класса BigDecimal;
+            BigDecimal b = new BigDecimal(args[1]);						//оператор new создаёт объект в памяти. Объект создаётся в heap, у объекта нет имени;
+            BigDecimal c = new BigDecimal(args[2]);						//BigDecimal c - объявляет переменную c типа BigDecimal и присваевает переменной ссылку на созданный объект.
+            BigDecimal d = new BigDecimal(args[3]);
+            int m = Integer.parseInt(args[4]);
+            int n = Integer.parseInt(args[5]);
+            int p = Integer.parseInt(args[6]);
+
+            // Вычисляем выражение. Выражение - это математическая формула, которую нужно вычислить по заданию 
+            BigDecimal result = calculateExpression(a, b, c, d, m, n, p);			//BigDecimal использует объект class MathCalculatorWithHalfUp. Метод calculateExpression вычисляет значения формулы для переданных параметров. Метод calculateExpression описан, в деталях, ниже, как: private static BigDecimal calculateExpression
+
+            // Округляем итоговый результат, result, до 2 знаков после запятой
+            BigDecimal roundedResult = result.setScale(2, RoundingMode.HALF_UP);		//режим округления, определённые в классе RoundingMode: HALF_UP — округление до «ближайшего соседа», если оба соседа не равноудалены (то есть когда округляемое число — 5) — в этом случае выполняется округление вверх;
+
+            // Выводим результаты
+            System.out.println("Income data:");
+            System.out.println("a = " + a);
+            System.out.println("b = " + b);
+            System.out.println("c = " + c);
+            System.out.println("d = " + d);
+            System.out.println("m = " + m);
+            System.out.println("n = " + n);
+            System.out.println("p = " + p);
+            System.out.println("-----------------------------------");
+            System.out.println("Smart result: " + result);
+            System.out.println("Result with  (HALF_UP, 2 simbol): " + roundedResult);
+
+        } catch (NumberFormatException e) {
+            System.out.println("Ошибка: все параметры должны быть числами");
+            System.out.println("a, b, c, d - десятичные числа (например: 1.5 или 2)");
+            System.out.println("m, n, p - целые числа (например: 2)");
+        } catch (ArithmeticException e) {
+            System.out.println("Математическая ошибка: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Ошибка при вычислении: " + e.getMessage());
+        }
+    }
+
+    private static BigDecimal calculateExpression(						//Метод, который реализует вычисления описанной формулы / выражения, из class MathCalculatorWithHalfUp
+            BigDecimal a, BigDecimal b, BigDecimal c, BigDecimal d,
+            int m, int n, int p) {
+
+        MathContext mc = new MathContext(50, RoundingMode.HALF_UP);				//Устанавливаем точность вычислений с округлением HALF_UP, из класса MathContext стандартной библиотеки Java
+
+///////////////// 1. Вычисляем: 527 * a / b^(2p)////////////////////////////			//вычисления
+        // b^(2p)
+        BigDecimal bPower2p = b.pow(2 * p, mc);
+
+        // Проверка деления на ноль
+        if (bPower2p.compareTo(BigDecimal.ZERO) == 0) {
+            throw new ArithmeticException("Деление на ноль: b^(2p) = 0");
+        }
+
+        // 527 * a
+        BigDecimal _527a = BIG_527.multiply(a, mc);
+
+        // 527 * a / b^(2p) - используем деление с указанным округлением
+        // Для деления используем scale = 50 и HALF_UP
+        BigDecimal part1 = _527a.divide(bPower2p, 50, RoundingMode.HALF_UP);
+
+///////////////// 2. Вычисляем числитель: (123 + part1) * (123 - part1)/////
+        BigDecimal sum = BIG_123.add(part1, mc);
+        BigDecimal diff = BIG_123.subtract(part1, mc);
+        BigDecimal numerator = sum.multiply(diff, mc);
+
+///////////////// 3. Вычисляем знаменатель://///////////////////////////////
+        //    ∛(856 + c^n * d^m) * (e - lg6)
+
+        // 3.1. c^n
+        BigDecimal cPowerN;
+        if (n == 0) {
+            cPowerN = BigDecimal.ONE;
+        } else {
+            cPowerN = c.pow(n, mc);
+        }
+
+        // 3.2. d^m
+        BigDecimal dPowerM;
+        if (m == 0) {
+            dPowerM = BigDecimal.ONE;
+        } else {
+            dPowerM = d.pow(m, mc);
+        }
+
+        // 3.3. c^n * d^m
+        BigDecimal cPowerN_dPowerM = cPowerN.multiply(dPowerM, mc);
+
+        // 3.4. 856 + c^n * d^m
+        BigDecimal insideCubeRoot = BIG_856.add(cPowerN_dPowerM, mc);
+
+        // Проверка на отрицательное число под корнем
+        if (insideCubeRoot.compareTo(BigDecimal.ZERO) < 0) {
+            throw new ArithmeticException("Отрицательное число под кубическим корнем: " + insideCubeRoot);
+        }
+
+        // 3.5. ∛(856 + c^n * d^m) - кубический корень
+        double insideDouble = insideCubeRoot.doubleValue();
+        double cubeRoot = Math.cbrt(insideDouble);
+
+        // Конвертируем обратно в BigDecimal с округлением
+        BigDecimal cubeRootBig = new BigDecimal(cubeRoot, mc);
+
+        // 3.6. e - lg6 (число Эйлера - десятичный логарифм 6)
+        double euler = Math.E;
+        double log6 = Math.log10(6);
+        double eMinusLog6 = euler - log6;
+
+        // Конвертируем в BigDecimal с округлением
+        BigDecimal eMinusLog6Big = new BigDecimal(eMinusLog6, mc);
+
+        // 3.7. Вторая часть знаменателя: ∛(...) * (e - lg6)
+        BigDecimal denominator = cubeRootBig.multiply(eMinusLog6Big, mc);
+
+        // Проверка деления на ноль в знаменателе
+        if (denominator.compareTo(BigDecimal.ZERO) == 0) {
+            throw new ArithmeticException("Деление на ноль: знаменатель равен 0");
+        }
+
+/////////////// 4. Result: up / down ////////////////////////////////////////////
+
+        BigDecimal result = numerator.divide(denominator, 50, RoundingMode.HALF_UP);			        // use / with scale = 50 and HALF_UP
+
+        return result;
+    }
+}
+
+
+=====================================================================================
+===== PS C:\app\java_lesson\task_1-6\AllFivesCalculator.java ========================
+import java.math.BigDecimal;										//
+import java.math.RoundingMode;										//
+
+public class AllFivesCalculator {
+    public static void main(String[] args) {
+        BigDecimal five = new BigDecimal("5");								// переменная five - объявляется переменной c типа BigDecimal, и присваивает переменной ссылку на созданный объект в памяти JVM. Объект содержит не просто цифру "5", а сложную структуру со служебной информацией, в куче-heap JVM. Ссылка на объект. Может быть null. Для арифметических методов;
+        int p = 5;											//объявляется переменная, примитивного типа int, со значением в стеке-stack хранится, в main(). Непосредственное значение. Не может быть null;
+
+        // Вычисляем с помощью BigDecimal
+        BigDecimal result = compute(five, p);								//Вызов метода compute с параметрами (five, p)
+
+        // Округление
+        BigDecimal rounded = result.setScale(2, RoundingMode.HALF_UP);					//результат, потом, округлятся до 2 знаков после запятой.
+
+        System.out.println("Result, if all are = 5:");
+        System.out.println("X = " + rounded);
+    }
+
+    static BigDecimal compute(BigDecimal five, int p) {							//Описание метода compute с константами
+        BigDecimal _123 = new BigDecimal("123");
+        BigDecimal _527 = new BigDecimal("527");
+        BigDecimal _856 = new BigDecimal("856");
+        int scale = 30;											//определение точности расчётов, до 30 знаков после запятой.
+
+        // 1. 527*5 / 5^(10) = 2635 / 9765625
+        BigDecimal numerator1 = _527.multiply(five); 							// 2635
+        BigDecimal denominator1 = five.pow(10); 							// 5^10 = 9765625
+        BigDecimal fraction = numerator1.divide(denominator1, scale, RoundingMode.HALF_UP);
+
+////////// 2. Числитель: (123 + fraction) * (123 - fraction)
+        BigDecimal sum = _123.add(fraction);
+        BigDecimal diff = _123.subtract(fraction);
+        BigDecimal numeratorFinal = sum.multiply(diff);							//numerator - числитель
+
+////////// 3. Знаменатель
+        // 5^5 = 3125, 5^5 * 5^5 = 5^10 = 9765625
+        BigDecimal fivePow5 = five.pow(5); 								// 3125
+        BigDecimal product = fivePow5.multiply(fivePow5); 						// 9765625
+        BigDecimal insideRoot = _856.add(product); 							// 856 + 9765625 = 9766481
+
+        double cubeRoot = Math.cbrt(insideRoot.doubleValue());						//
+        double eMinusLog6 = Math.E - Math.log10(6.0);
+        BigDecimal denominatorFinal = new BigDecimal(cubeRoot * eMinusLog6)				//denominator - знаменатель
+                .setScale(scale, RoundingMode.HALF_UP);
+
+        // 4. Результат
+        return numeratorFinal.divide(denominatorFinal, scale, RoundingMode.HALF_UP);			//вернёт результат деления числителя на знаминатель, с округлением 30 знаков. Результат, поттом в методе main округлится до 2-х знаков. Константа RoundingMode.HALF_UP - совпадает с той, что используется в методе main. Они не зависят друг от друга. Одно и то же значение используется в двух местах.
+    }
+}
