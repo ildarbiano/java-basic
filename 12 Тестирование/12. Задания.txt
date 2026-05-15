@@ -1,0 +1,139 @@
+================= Задание 1
+Дан класс, описывающий Студента, который
+имеет имя и набор оценок:
+
+public class Student {
+    private String name;  
+    private List<Integer> grades= new ArrayList<>();
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Integer> getGrades() {
+        return grades;
+    }
+
+    public void addGrade(int grade) {
+        if (grade < 2 || grade > 5) {
+            throw new IllegalArgumentException(grade + " is wrong grade");
+        }
+        grades.add(grade);
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 13 * hash + Objects.hashCode(this.name);
+        hash = 13 * hash + Objects.hashCode(this.grades);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return Objects.equals(this.grades, other.grades);
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" + "name=" + name + ", marks=" + grades + '}';
+    }    
+}
+
+Необходимо выполнить следующие задачи:
+	Исправить инкапсуляцию для списка оценок
+	Написать тест(ы), проверяющие инкапсуляцию оценок
+	Обеспечить не менее чем 85% покрытия тестами класса Student
+
+================= Задание 2
+Предположим, что мы изменили класс Студента таким образом, что проверка корректности добавляемой оценки выполняется им не самостоятельно, а с помощью сервиса checkGrade, который получает параметр grade и возвращает true или false.
+Реализуйте заглушку сервиса и реализуйте тест на проверку того, что правильные оценки попадают в список оценок, а неправильные нет.
+Реализуй заглушку сервиса и тест на проверку того, что правильные оценки попадают в список оценок, а неправильные нет.
+@ToString
+@EqualsAndHashCode
+public class Student {
+
+    @Getter    @Setter
+    private String name;
+    private List<Integer> grades = new ArrayList<>();
+
+    public Student(String name) {
+        this.name = name;
+    }
+
+    public List<Integer> getGrades() {
+        return new ArrayList<>(grades);
+    }
+
+    @SneakyThrows
+    public void addGrade(int grade) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet request = new HttpGet("http://localhost:5352/checkGrade?grade="+grade);
+        CloseableHttpResponse httpResponse = httpClient.execute(request);
+        HttpEntity entity = httpResponse.getEntity();
+        if(!Boolean.parseBoolean(EntityUtils.toString(entity))){
+            throw new IllegalArgumentException(grade + " is wrong grade");
+        }
+        grades.add(grade);
+    }
+
+    @SneakyThrows
+    public int raiting() {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet request = new HttpGet("http://localhost:5352/educ?sum="+grades.stream().mapToInt(x->x).sum());
+        CloseableHttpResponse httpResponse = httpClient.execute(request);
+        HttpEntity entity = httpResponse.getEntity();
+        return Integer.parseInt(EntityUtils.toString(entity));
+    }
+}
+
+================= Задание 3
+В комплекте к данному заданию предоставлен zip архив RestApp.zip. Его необходимо распаковать. Внутри будет папка lib с набором jar файлов используемых как библиотеки, и основной jar файл, который необходимо запустить, стандартным образом, например:
+java -jar RestApp.jar
+
+Учтите, что для запуска требуется JVM не ниже 16ой версии.  Запустившееся приложение будет развернуто локально на порт 8080, и будет ожидать запросов по
+протоколу HTTP. В нем реализовано два ендпоинта, первый по адресу /getStudent возвращает JSON файл со следующими данными:
+{
+	"name": " vasia ",
+	"marks": [
+		2,
+		3,
+		5,
+	]
+}
+
+Второй, по адресу /wrongStudent возвращает JSON файл со следующими данными:
+{
+	"name": null,
+	"marks": [
+		1,
+		6
+	]
+}
+
+Необходимо написать набор тестов, которые будут проверять корректность работы сервиса возвращающего данные о студенте по следующим правилам:
+	Имя должно быть всегда заполнено
+	Список оценок всегда должен быть заполнен
+	В списке не может быть чисел меньше 2 и больше 5
+	Список может быть пустым
